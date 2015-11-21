@@ -34,7 +34,7 @@ public class CommandSetDelegate implements ICommand {
 
     @Override
     public List getCommandAliases() {
-        return new ArrayList(CommandManager.getCommandSet(identifier).getSubnodes().keySet());
+        return new ArrayList(); //CommandManager.getCommandSet(identifier).getSubnodes().keySet());
     }
 
     @Override
@@ -49,8 +49,8 @@ public class CommandSetDelegate implements ICommand {
 
     @Override
     public boolean isUsernameIndex(String[] strings, int i) {
-        // Uh...
-        return true;
+        // Uh... NOP.
+        return false;
     }
 
     @Override
@@ -60,8 +60,8 @@ public class CommandSetDelegate implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender ics, String[] strings) {
-        String result = CommandManager.execute(ics.getCommandSenderName(), identifier, strings);
+    public void processCommand(ICommandSender ics, String[] args) {
+        String result = CommandManager.execute(ics, identifier, args);
         if (result != null && !result.isEmpty()) {
             ics.addChatMessage(new ChatComponentText(result));
         }

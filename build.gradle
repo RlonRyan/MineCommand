@@ -7,7 +7,7 @@ sourceSets {
             srcDir 'src/main'
         }
         resources {
-            srcDir 'rsc/main'
+            srcDir 'rsc'
         }
     }
 }
@@ -32,13 +32,18 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+sourceCompatibility = version_java
+targetCompatibility = version_java
+version = "${version_major}.${version_minor}.${version_patch}"
+group= "${mod_group}"
+archivesBaseName = mod_id
 
 minecraft {
     version = "1.7.10-10.13.4.1566-1.7.10"
-    runDir = "eclipse"
+    runDir = "../run"
+    replaceIn "src/main/minecommand/MineCommandMod.java"
+    replace "\${mod_id}", mod_id
+    replace "\${version_mod}", project.version
 }
 
 dependencies {

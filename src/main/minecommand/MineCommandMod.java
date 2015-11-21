@@ -7,20 +7,23 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import minecommand.commands.CommandSetDelegate;
 import minecommand.commands.DefaultCommands;
+import minecommand.commands.converters.StaticMineConverters;
 import modcmd.commands.CommandManager;
+import modcmd.converters.ConverterManager;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.Level;
 
-@Mod(modid = ExampleMod.MODID, version = ExampleMod.VERSION)
-public class ExampleMod {
+@Mod(modid = MineCommandMod.MODID, version = MineCommandMod.VERSION)
+public class MineCommandMod {
 
-    public static final String MODID = "MineCommand";
-    public static final String VERSION = "1.0";
+    public static final String MODID = "${mod_id}";
+    public static final String VERSION = "${version_mod}";
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        CommandManager.getCommandSet("modcmd").registerCommand(DefaultCommands.class);
+        ConverterManager.addConverters(StaticMineConverters.class);
+        CommandManager.getCommandSet(".").registerCommand(DefaultCommands.class);
         System.out.println("Initialization Complete");
     }
 

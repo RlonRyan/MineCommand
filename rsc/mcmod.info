@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "MineCommand",
+  "name": "MineCommand",
+  "description": "Modular command manager.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://www.github.com/rlonryan/minecommand",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["RlonRyan"],
+  "credits": "The FE Team",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
