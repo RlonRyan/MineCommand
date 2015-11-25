@@ -10,6 +10,7 @@ import modcmd.converters.exceptions.ConversionException;
 import modcmd.converters.exceptions.ConverterException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldSettings;
 
 /**
@@ -17,6 +18,15 @@ import net.minecraft.world.WorldSettings;
  * @author Ryan
  */
 public class StaticMineConverters {
+
+    @Converter("userPlayer")
+    public static EntityPlayer getUserPlayer(Object user, String tag, String value) throws ConverterException {
+        if (user instanceof EntityPlayer) {
+            return (EntityPlayer) user;
+        } else {
+            throw new ConversionException(tag, value, "Entity Player");
+        }
+    }
 
     @Converter("player")
     public static EntityPlayer getPlayer(Object user, String tag, String value) throws ConverterException {
@@ -31,7 +41,7 @@ public class StaticMineConverters {
         }
     }
 
-    @Converter("usrpos")
+    @Converter("userpos")
     public static int getUserCoordinate(Object user, String tag, String value) throws ConverterException {
         if (value.toLowerCase().charAt(0) != '%' && !value.trim().isEmpty()) {
             try {
@@ -41,19 +51,31 @@ public class StaticMineConverters {
             }
         }
 
-        if (!(user instanceof ICommandSender)) {
+        if (!(user instanceof EntityPlayer)) {
             throw new ConverterException("Bad user!");
         }
 
-        ICommandSender sender = (ICommandSender) user;
+        EntityPlayer sender = (EntityPlayer) user;
+        
+        int delta = 0;
+        
+        if(value.length() > 1) {
+            try {
+                delta = Integer.decode(value.substring(1));
+            } catch (NumberFormatException e) {
+                throw new ConversionException(tag, value, "Integer Coordinate");
+            }
+        }
 
         switch (tag.toLowerCase().charAt(0)) {
             case 'x':
-                return (sender).getPlayerCoordinates().posX;
+                return (int)sender.getPlayerCoordinates().posX + delta;
             case 'y':
-                return (sender).getPlayerCoordinates().posY;
+                return (int)sender.getPlayerCoordinates().posY + delta;
             case 'z':
-                return (sender).getPlayerCoordinates().posZ;
+                return (int)sender.posZ + delta;
+            case 'd':
+                return sender.dimension + delta;
         }
 
         throw new ConversionException(tag, value, "User Coordinate");
@@ -87,22 +109,22 @@ public class StaticMineConverters {
 
         throw new ConversionException(tag, value, "Game Mode");
     }
-    
-    @Converter("bool")
-    public static boolean getBool(Object user, String tag, String value) throws ConverterException {
 
-        switch (value.charAt(0)) {
-            case 'F':
-            case 'f':
-            case '0':
-                return false;
-            case 'T':
-            case 't':
-            case '1':
-                return true;
+    @Converter("useritem")
+    public static ItemStack getUserItem(Object user, String tag, String value) throws ConverterException {
+        if (!(user instanceof EntityPlayer)) {
+            throw new ConverterException("Bad user!");
         }
 
-        throw new ConversionException(tag, value, "Boolean");
+        EntityPlayer player = (EntityPlayer) user;
+
+        ItemStack is = player.inventory.getCurrentItem();
+
+        if (is == null) {
+            throw new ConverterException("You are not holding a valid item.");
+        }
+
+        return is;
     }
 
 }

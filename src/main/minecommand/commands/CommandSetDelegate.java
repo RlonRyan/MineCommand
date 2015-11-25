@@ -8,6 +8,7 @@ package minecommand.commands;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import modcmd.commands.CommandManager;
 import net.minecraft.command.ICommand;
@@ -61,16 +62,16 @@ public class CommandSetDelegate implements ICommand {
 
     @Override
     public void processCommand(ICommandSender ics, String[] args) {
-        String result = CommandManager.execute(ics, identifier, args);
-        if (result != null && !result.isEmpty()) {
-            ics.addChatMessage(new ChatComponentText(result));
+        Deque<String> results = CommandManager.execute(ics, identifier, args);
+        for (String line : results) {
+            ics.addChatMessage(new ChatComponentText(line));
         }
     }
 
     @Override
     public int compareTo(Object o) {
         //Me is better.
-        return 1;
+        return o == this ? 0 : 1;
     }
 
 }

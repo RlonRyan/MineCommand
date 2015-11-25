@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import minecommand.commands.CommandSetDelegate;
 import minecommand.commands.DefaultCommands;
+import minecommand.commands.DefaultTeleportCommands;
 import minecommand.commands.converters.StaticMineConverters;
 import modcmd.commands.CommandManager;
 import modcmd.converters.ConverterManager;
@@ -24,6 +25,7 @@ public class MineCommandMod {
     public void init(FMLInitializationEvent event) {
         ConverterManager.addConverters(StaticMineConverters.class);
         CommandManager.getCommandSet(".").registerCommand(DefaultCommands.class);
+        CommandManager.getCommandSet(".").registerCommand(DefaultTeleportCommands.class);
         System.out.println("Initialization Complete");
     }
 

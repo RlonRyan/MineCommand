@@ -9,6 +9,7 @@ import minecommand.MineCommandMod;
 import modcmd.commands.Command;
 import modcmd.commands.CommandParameter;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldSettings;
@@ -85,6 +86,14 @@ public class DefaultCommands {
             @CommandParameter(tag = "p", name = "player", description = "The target player.", type = "player", defaultValue = "%") EntityPlayer user
     ) {
         user.addChatMessage(new ChatComponentText("UUID: " + user.getPersistentID().toString()));
+    }
+    
+    @Command("rename")
+    public static void renameItem(
+            @CommandParameter(tag = "i", name = "item", description = "The item.", type = "useritem", defaultValue = "%") ItemStack item,
+            @CommandParameter(tag = "n", name = "name", description = "The new name.", type = "string") String name
+    ) {
+        item.setStackDisplayName(name);
     }
 
 }
