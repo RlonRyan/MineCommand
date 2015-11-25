@@ -5,23 +5,42 @@
  */
 package minecommand.commands;
 
+import java.util.ArrayDeque;
+import javax.vecmath.Point3d;
 import minecommand.MineCommandMod;
 import modcmd.commands.Command;
+import modcmd.commands.CommandManager;
 import modcmd.commands.CommandParameter;
+import modcmd.user.CommandUser;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldSettings;
+import scala.actors.threadpool.Arrays;
 
 /**
  *
  * @author Ryan
  */
 public class DefaultCommands {
+    
+    @Command("help")
+    public static void help(
+            @CommandUser ICommandSender user,
+            @CommandParameter(tag = "s", name = "subject", description = "The subject to get help on.", type = "String", defaultValue = " ") String message
+    ) {
+        for (String line : CommandManager.getCommandSet(".").getHelp(new ArrayDeque<String>(Arrays.asList(message.split("\\s+"))))) {
+            user.addChatMessage(new ChatComponentText(line));
+        }
+    }
 
     @Command("broadcast")
-    public static void message(@CommandParameter(tag = "m", name = "message", description = "The message to broadcast.", type = "String") String message) {
+    public static void message(
+            @CommandParameter(tag = "m", name = "message", description = "The message to broadcast.", type = "String") String message
+    ) {
         MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("[Broadcast] " + message));
     }
 
@@ -63,8 +82,8 @@ public class DefaultCommands {
         user.addChatMessage(new ChatComponentText("New speed: " + user.capabilities.getWalkSpeed() + ", " + user.capabilities.getFlySpeed()));
     }
     
-    @Command("speed")
-    public static void speed(
+    @Command("heal")
+    public static void heal(
             @CommandParameter(tag = "p", name = "player", description = "The target player.", type = "player", defaultValue = "%") EntityPlayer user
     ) {
         user.addChatMessage(new ChatComponentText("Healing!"));
@@ -94,6 +113,14 @@ public class DefaultCommands {
             @CommandParameter(tag = "n", name = "name", description = "The new name.", type = "string") String name
     ) {
         item.setStackDisplayName(name);
+    }
+    
+    @Command("smite")
+    public static void smite(
+            @CommandUser EntityPlayer user,
+            @CommandParameter(tag = "p", name = "point", description = "The point to smite", type = "userpoint", defaultValue = "%") Point3d point
+    ) {
+        user.worldObj.addWeatherEffect(new EntityLightningBolt(user.worldObj, point.x, point.y, point.z));
     }
 
 }

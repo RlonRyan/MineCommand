@@ -19,7 +19,7 @@ import net.minecraftforge.common.DimensionManager;
  * @author RlonRyan
  */
 public class DefaultTeleportCommands {
-    
+
     @Command("tp")
     public static void teleport(
             @CommandUser EntityPlayerMP player,
@@ -28,21 +28,22 @@ public class DefaultTeleportCommands {
             @CommandParameter(tag = "z", name = "Z-Pos", description = "The z-pos to teleport to", type = "userpos", defaultValue = "%") int z,
             @CommandParameter(tag = "d", name = "Dimension", description = "The dimension to teleport to", type = "userpos", defaultValue = "%") int dim
     ) {
-        
+
         if (!DimensionManager.isDimensionRegistered(dim)) {
             player.addChatComponentMessage(new ChatComponentText("No dimenison: " + dim));
             return;
         }
-        
+
         if (player.dimension != dim) {
             DimensionManager.initDimension(dim);
             MinecraftServer.getServer().getConfigurationManager()
                     .transferPlayerToDimension(player, dim, new Teleporter(MinecraftServer.getServer().worldServerForDimension(dim)));
         }
-        
-        if (player.isRiding())
-        player.mountEntity(null);
+
+        if (player.isRiding()) {
+            player.mountEntity(null);
+        }
         player.playerNetServerHandler.setPlayerLocation(x, y, z, player.cameraPitch, player.cameraYaw);
     }
-    
+
 }
