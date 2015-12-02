@@ -20,7 +20,10 @@ import net.minecraftforge.common.DimensionManager;
  */
 public class DefaultTeleportCommands {
 
-    @Command("tp")
+    @Command(
+            name = "tp",
+            about = "Teleports the user to a location."
+    )
     public static void teleport(
             @CommandUser EntityPlayerMP player,
             @CommandParameter(tag = "x", name = "X-Pos", description = "The x-pos to teleport to", type = "userpos", defaultValue = "%") int x,

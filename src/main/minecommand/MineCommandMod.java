@@ -24,8 +24,8 @@ public class MineCommandMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         ConverterManager.addConverters(StaticMineConverters.class);
-        CommandManager.getCommandSet(".").registerCommand(DefaultCommands.class);
-        CommandManager.getCommandSet(".").registerCommand(DefaultTeleportCommands.class);
+        CommandManager.getCommandSet(".").registerCommands(DefaultCommands.class);
+        CommandManager.getCommandSet(".").registerCommands(DefaultTeleportCommands.class);
         System.out.println("Initialization Complete");
     }
 
