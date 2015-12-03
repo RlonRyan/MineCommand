@@ -21,7 +21,7 @@ public class MineCommandMod {
 
     public static final String MODID = "${mod_id}";
     public static final String VERSION = "${version_mod}";
-    public static final boolean IN_DEV = true;
+    public static final boolean IN_DEV = false;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
