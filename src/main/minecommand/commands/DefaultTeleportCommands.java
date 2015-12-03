@@ -49,4 +49,25 @@ public class DefaultTeleportCommands {
         player.playerNetServerHandler.setPlayerLocation(x, y, z, player.cameraPitch, player.cameraYaw);
     }
 
+    @Command(
+            name = "tpa",
+            about = "Teleports the user to a location."
+    )
+    public static void teleportTo(
+            @CommandUser EntityPlayerMP player,
+            @CommandParameter(tag = "t", name = "Target", description = "The player to teleport to.", type = "player") EntityPlayerMP target
+    ) {
+
+        if (player.dimension != target.dimension) {
+            DimensionManager.initDimension(target.dimension);
+            MinecraftServer.getServer().getConfigurationManager()
+                    .transferPlayerToDimension(player, target.dimension, new Teleporter(MinecraftServer.getServer().worldServerForDimension(target.dimension)));
+        }
+
+        if (player.isRiding()) {
+            player.mountEntity(null);
+        }
+        player.playerNetServerHandler.setPlayerLocation(target.serverPosX, target.serverPosY, target.serverPosZ, target.cameraPitch, target.cameraYaw);
+    }
+
 }
