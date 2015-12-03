@@ -1,3 +1,3 @@
 [submodule "lib/ModularCommands"]
 	path = lib/ModularCommands
-	url = git@github.com:RlonRyan/ModularCommands
+	url = https://github.com/RlonRyan/ModularCommands
