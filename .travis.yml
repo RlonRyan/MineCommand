@@ -2,10 +2,10 @@
 # Tell Travis this is a Java project.
 language: java
 
-# Tell Travis we are interested in Java 7.
+# Tell Travis we are interested in Java 8.
+# That is, for compilation purposes.
 jdk:
-  # - oraclejdk8
-  - oraclejdk7
+  - oraclejdk8
 
 # Tell Travis we don't need sudo,
 # so Travis uses containers.
