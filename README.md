@@ -1,4 +1,4 @@
-# MineCommand
+# MineCommand [![Build Status](https://travis-ci.org/RlonRyan/MineCommand.svg?branch=master)](https://travis-ci.org/RlonRyan/MineCommand)
 Modular Commands for MineCraft
 
 ## About:
