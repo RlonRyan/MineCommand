@@ -1,4 +1,5 @@
 
+apply plugin: "java"
 apply plugin: "forge"
 
 sourceSets {
@@ -30,8 +31,6 @@ buildscript {
     }
 }
 
-apply plugin: 'forge'
-
 sourceCompatibility = version_java
 targetCompatibility = version_java
 version = "${version_major}.${version_minor}.${version_patch}"
@@ -50,8 +49,8 @@ dependencies {
     compile project(":lib/ModularCommands")
 }
 
-processResources
-{
+processResources {
+
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -70,4 +69,13 @@ processResources
     }
 }
 
+task dist {
+    description "Generate the dist. into the dist folder."
 
+    delete "${projectDir}/dist"
+    copy {
+        from "${buildDir}/libs"
+        into "${projectDir}/dist"
+        include "${project.name}-${project.version}.jar"
+    }
+}

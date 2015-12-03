@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
+import minecommand.MineCommandMod;
 import modcmd.commands.CommandManager;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -30,6 +31,7 @@ public class CommandSetDelegate implements ICommand {
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender ics) {
         // Hackish...
+        // "Probably true."
         return true;
     }
 
@@ -45,7 +47,7 @@ public class CommandSetDelegate implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender ics) {
-        return CommandManager.getCommandSet(identifier).getUsage();
+        return '/' + CommandManager.getCommandSet(identifier).getUsage();
     }
 
     @Override
@@ -62,7 +64,7 @@ public class CommandSetDelegate implements ICommand {
 
     @Override
     public void processCommand(ICommandSender ics, String[] args) {
-        Deque<String> results = CommandManager.execute(ics, identifier, args);
+        Deque<String> results = CommandManager.execute(ics, identifier, args, !MineCommandMod.IN_DEV);
         for (String line : results) {
             ics.addChatMessage(new ChatComponentText(line));
         }
@@ -71,7 +73,7 @@ public class CommandSetDelegate implements ICommand {
     @Override
     public int compareTo(Object o) {
         //Me is better.
-        return o == this ? 0 : 1;
+        return o.equals(this) ? 0 : -1;
     }
 
 }

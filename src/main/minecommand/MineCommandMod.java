@@ -11,6 +11,7 @@ import minecommand.commands.DefaultTeleportCommands;
 import minecommand.commands.converters.StaticMineConverters;
 import modcmd.commands.CommandManager;
 import modcmd.converters.ConverterManager;
+import modcmd.documents.CommandPageGenerator;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.Level;
@@ -20,12 +21,14 @@ public class MineCommandMod {
 
     public static final String MODID = "${mod_id}";
     public static final String VERSION = "${version_mod}";
+    public static final boolean IN_DEV = true;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         ConverterManager.addConverters(StaticMineConverters.class);
         CommandManager.getCommandSet(".").registerCommands(DefaultCommands.class);
         CommandManager.getCommandSet(".").registerCommands(DefaultTeleportCommands.class);
+        CommandManager.getCommandSet(".").registerCommands(CommandPageGenerator.class);
         System.out.println("Initialization Complete");
     }
 
