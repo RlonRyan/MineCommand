@@ -121,7 +121,7 @@ public class DefaultCommands {
     public static void locate(
             @CommandParameter(tag = "p", name = "player", description = "The target player.", type = "player", defaultValue = "%") EntityPlayer user
     ) {
-        user.addChatMessage(new ChatComponentText(String.format("Location: [%1$d, %2$d, %3$d]", user.chunkCoordX, user.chunkCoordY, user.chunkCoordZ)));
+        user.addChatMessage(new ChatComponentText(String.format("Location: [%1$d, %2$d, %3$d]", user.posX, user.posY, user.posZ)));
     }
 
     @Command(

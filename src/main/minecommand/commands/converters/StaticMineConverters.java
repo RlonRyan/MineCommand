@@ -5,19 +5,22 @@
  */
 package minecommand.commands.converters;
 
+import java.util.List;
 import javax.vecmath.Point3d;
 import modcmd.converters.Converter;
 import modcmd.converters.exceptions.ConversionException;
 import modcmd.converters.exceptions.ConverterException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldSettings;
 
 /**
  *
- * @author Ryan
+ * @author RlonRyan
  */
 public class StaticMineConverters {
 
@@ -31,15 +34,20 @@ public class StaticMineConverters {
     }
 
     @Converter("player")
-    public static EntityPlayer getPlayer(Object user, String tag, String value) throws ConverterException {
+    public static EntityPlayerMP getPlayer(Object user, String tag, String value) throws ConverterException {
         if (value.charAt(0) == '%') {
-            if (user instanceof EntityPlayer) {
-                return (EntityPlayer) user;
+            if (user instanceof EntityPlayerMP) {
+                return (EntityPlayerMP) user;
             } else {
                 throw new ConversionException(tag, value, "Entity Player");
             }
         } else {
-            throw new ConverterException("Bad user. Alternates not yet supported!");
+            for (EntityPlayerMP p : (List<EntityPlayerMP>) MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+                if (p.getCommandSenderName().equalsIgnoreCase(value)) {
+                    return p;
+                }
+            }
+            throw new ConverterException("User: " + value + " not found");
         }
     }
 
@@ -147,10 +155,10 @@ public class StaticMineConverters {
             return new Point3d(pos.blockX, pos.blockY, pos.blockZ);
         } else {
             String[] tokens = value.split("\\s+");
-            if(tokens.length != 3) {
+            if (tokens.length != 3) {
                 throw new ConversionException(tag, value, "User point");
             }
-            
+
             try {
                 return new Point3d(Integer.decode(tokens[0]), Integer.decode(tokens[1]), Integer.decode(tokens[2]));
             } catch (NumberFormatException ne) {

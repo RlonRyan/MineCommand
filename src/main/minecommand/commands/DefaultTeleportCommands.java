@@ -67,7 +67,7 @@ public class DefaultTeleportCommands {
         if (player.isRiding()) {
             player.mountEntity(null);
         }
-        player.playerNetServerHandler.setPlayerLocation(target.serverPosX, target.serverPosY, target.serverPosZ, target.cameraPitch, target.cameraYaw);
+        player.playerNetServerHandler.setPlayerLocation(target.posX, target.posY, target.posZ, target.cameraPitch, target.cameraYaw);
     }
 
 }
