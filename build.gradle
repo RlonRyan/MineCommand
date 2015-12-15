@@ -1,6 +1,7 @@
 
-apply plugin: "java"
-apply plugin: "forge"
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.2"
+}
 
 sourceSets {
     main {
@@ -13,44 +14,52 @@ sourceSets {
     }
 }
 
+// Load Properties
+Properties mod = new Properties()
+mod.load(new FileInputStream("${project.rootDir}/mod.properties"))
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
-}
-
-sourceCompatibility = version_java
-targetCompatibility = version_java
-version = "${version_major}.${version_minor}.${version_patch}"
-group= "${mod_group}"
-archivesBaseName = mod_id
+sourceCompatibility = mod.version_java
+targetCompatibility = mod.version_java
+version = "${mod.version_major}.${mod.version_minor}.${mod.version_patch}"
+group = "${mod.group}.${mod.author}.${mod.name}"
+archivesBaseName = mod.name
 
 minecraft {
-    version = "1.7.10-10.13.4.1566-1.7.10"
+    version = "${mod.version_minecraft}-${mod.version_forge}"
+    mappings = mod.version_mappings
     runDir = "../run"
+    makeObfSourceJar = false
+    mod.each { prop ->
+        replaceIn "src/main/minecommand/MineCommandMod.java"
+        replace "\${${prop.key}}", prop.value
+        println prop
+    }
     replaceIn "src/main/minecommand/MineCommandMod.java"
-    replace "\${mod_id}", mod_id
-    replace "\${version_mod}", project.version
+    replace "\${version}", project.version
+}
+
+repositories {
+    maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven/"
+    }
+    maven {
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven/"
+    }
 }
 
 dependencies {
     compile project(":lib/ModularCommands")
+    // Mods (For auto-import)
+    compile "codechicken:CodeChickenLib:1.8-1.1.2.139:dev"
+    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+    compile "mcp.mobius.waila:Waila:1.6.0-B2_1.8:dev"
 }
 
-processResources {
-
+processResources
+{
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -69,13 +78,16 @@ processResources {
     }
 }
 
-task dist {
-    description "Generate the dist. into the dist folder."
+import java.util.regex.Pattern
 
-    delete "${projectDir}/dist"
-    copy {
-        from "${buildDir}/libs"
-        into "${projectDir}/dist"
-        include "${project.name}-${project.version}.jar"
-    }
+task incBuild {
+    def number = Integer.parseInt(mod.version_build) + 1
+    def modfile = file("mod.properties")
+    def modprops = modfile.getText()
+    def pattern = Pattern.compile("version_build\\s+=\\s+\\d+")
+    def matcher = pattern.matcher(modprops)
+    modprops = matcher.replaceAll("version_build = " + number)
+    modfile.write(modprops)
 }
+
+build.dependsOn(incBuild)

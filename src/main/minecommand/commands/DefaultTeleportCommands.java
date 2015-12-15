@@ -26,10 +26,10 @@ public class DefaultTeleportCommands {
     )
     public static void teleport(
             @CommandUser EntityPlayerMP player,
-            @CommandParameter(tag = "x", name = "X-Pos", description = "The x-pos to teleport to", type = "userpos", defaultValue = "%") int x,
-            @CommandParameter(tag = "y", name = "Y-Pos", description = "The y-pos to teleport to", type = "userpos", defaultValue = "%") int y,
-            @CommandParameter(tag = "z", name = "Z-Pos", description = "The z-pos to teleport to", type = "userpos", defaultValue = "%") int z,
-            @CommandParameter(tag = "d", name = "Dimension", description = "The dimension to teleport to", type = "userpos", defaultValue = "%") int dim
+            @CommandParameter(tag = "x", name = "X-Pos", description = "The x-pos to teleport to", type = "coordinate", defaultValue = "%") int x,
+            @CommandParameter(tag = "y", name = "Y-Pos", description = "The y-pos to teleport to", type = "coordinate", defaultValue = "%") int y,
+            @CommandParameter(tag = "z", name = "Z-Pos", description = "The z-pos to teleport to", type = "coordinate", defaultValue = "%") int z,
+            @CommandParameter(tag = "d", name = "Dimension", description = "The dimension to teleport to", type = "coordinate", defaultValue = "%") int dim
     ) {
 
         if (!DimensionManager.isDimensionRegistered(dim)) {

@@ -14,6 +14,7 @@ import minecommand.MineCommandMod;
 import modcmd.commands.CommandManager;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
 /**
@@ -29,19 +30,19 @@ public class CommandSetDelegate implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender ics) {
+    public boolean canCommandSenderUse(ICommandSender ics) {
         // Hackish...
         // "Probably true."
         return true;
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return new ArrayList(); //CommandManager.getCommandSet(identifier).getSubnodes().keySet());
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return this.identifier;
     }
 
@@ -57,13 +58,13 @@ public class CommandSetDelegate implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender ics, String[] strings) {
-        ArrayDeque<String> args = new ArrayDeque<String>(Arrays.asList(strings));
+    public List addTabCompletionOptions(ICommandSender ics, String[] strings, BlockPos pos) {
+        ArrayDeque<String> args = new ArrayDeque<>(Arrays.asList(strings));
         return CommandManager.getCommandSet(identifier).getNearest(args).suggestCompletion(args);
     }
 
     @Override
-    public void processCommand(ICommandSender ics, String[] args) {
+    public void execute(ICommandSender ics, String[] args) {
         Deque<String> results = CommandManager.execute(ics, identifier, args, !MineCommandMod.IN_DEV);
         for (String line : results) {
             ics.addChatMessage(new ChatComponentText(line));

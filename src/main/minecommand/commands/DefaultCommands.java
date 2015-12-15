@@ -6,8 +6,9 @@
 package minecommand.commands;
 
 import java.util.ArrayDeque;
-import javax.vecmath.Point3d;
+import java.util.Arrays;
 import minecommand.MineCommandMod;
+import minecommand.utility.WorldPoint;
 import modcmd.commands.Command;
 import modcmd.commands.CommandManager;
 import modcmd.commands.CommandParameter;
@@ -18,8 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
-import scala.actors.threadpool.Arrays;
 
 /**
  *
@@ -35,7 +36,7 @@ public class DefaultCommands {
             @CommandUser ICommandSender user,
             @CommandParameter(tag = "s", name = "subject", description = "The subject to get help on.", type = "String", defaultValue = " ") String message
     ) {
-        for (String line : CommandManager.getCommandSet(".").getHelp(new ArrayDeque<String>(Arrays.asList(message.split("\\s+"))))) {
+        for (String line : CommandManager.getCommandSet(".").getHelp(new ArrayDeque<>(Arrays.asList(message.split("\\s+"))))) {
             user.addChatMessage(new ChatComponentText(line));
         }
     }
@@ -121,7 +122,7 @@ public class DefaultCommands {
     public static void locate(
             @CommandParameter(tag = "p", name = "player", description = "The target player.", type = "player", defaultValue = "%") EntityPlayer user
     ) {
-        user.addChatMessage(new ChatComponentText(String.format("Location: [%1$d, %2$d, %3$d]", user.posX, user.posY, user.posZ)));
+        user.addChatMessage(new ChatComponentText(String.format("Location: [%1$f, %2$f, %3$f]", user.posX, user.posY, user.posZ)));
     }
 
     @Command(
@@ -139,7 +140,7 @@ public class DefaultCommands {
             about = "Renames the currently held item."
     )
     public static void renameItem(
-            @CommandParameter(tag = "i", name = "item", description = "The item.", type = "useritem", defaultValue = "%") ItemStack item,
+            @CommandParameter(tag = "i", name = "item", description = "The item.", type = "item", defaultValue = "%") ItemStack item,
             @CommandParameter(tag = "n", name = "name", description = "The new name.", type = "string") String name
     ) {
         item.setStackDisplayName(name);
@@ -150,10 +151,11 @@ public class DefaultCommands {
             about = "Smites a location"
     )
     public static void smite(
-            @CommandUser EntityPlayer user,
-            @CommandParameter(tag = "p", name = "point", description = "The point to smite", type = "userpoint", defaultValue = "%") Point3d point
+            @CommandParameter(tag = "p", name = "point", description = "The point to smite", type = "point", defaultValue = "%") WorldPoint point
     ) {
-        user.worldObj.addWeatherEffect(new EntityLightningBolt(user.worldObj, point.x, point.y, point.z));
+        System.out.println(point.toString());
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(point.dim);
+        world.addWeatherEffect(new EntityLightningBolt(world, point.x, point.y, point.z));
     }
 
 }
