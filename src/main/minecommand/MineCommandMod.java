@@ -4,9 +4,11 @@ import minecommand.commands.CommandSetDelegate;
 import minecommand.commands.DefaultCommands;
 import minecommand.commands.DefaultTeleportCommands;
 import minecommand.commands.converters.StaticMineConverters;
+import minecommand.commands.suggestors.StaticMineSuggestors;
 import modcmd.commands.CommandManager;
 import modcmd.converters.ConverterManager;
 import modcmd.documents.CommandPageGenerator;
+import modcmd.suggestors.SuggestorManager;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLLog;
@@ -25,6 +27,7 @@ public class MineCommandMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ConverterManager.addConverters(StaticMineConverters.class);
+        SuggestorManager.addSuggestors(StaticMineSuggestors.class);
         CommandManager.getCommandSet(".").registerCommands(DefaultCommands.class);
         CommandManager.getCommandSet(".").registerCommands(DefaultTeleportCommands.class);
         CommandManager.getCommandSet(".").registerCommands(CommandPageGenerator.class);
